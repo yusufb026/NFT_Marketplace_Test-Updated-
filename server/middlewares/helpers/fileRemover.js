@@ -1,13 +1,13 @@
 const fs = require("fs");
 
-module.exports = files => {
+module.exports = (files) => {
     return Promise.all(
         files.map(
-            file =>
+            (file) =>
                 new Promise((res, rej) => {
                     try {
-                        setTimeout(() => {                            
-                            fs.unlink(file, err => {
+                        setTimeout(() => {
+                            fs.unlink(file, (err) => {
                                 if (err) throw err;
                                 res();
                             });
@@ -19,4 +19,4 @@ module.exports = files => {
                 })
         )
     );
-}
+};

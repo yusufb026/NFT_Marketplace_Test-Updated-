@@ -1,14 +1,14 @@
-const asyncErrorHandler = require('../middlewares/helpers/asyncErrorHandler');
+const asyncErrorHandler = require("../middlewares/helpers/asyncErrorHandler");
 // const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-const paytm = require('paytmchecksum');
-const https = require('https');
-const Payment = require('../models/paymentModel');
-const ErrorHandler = require('../utils/errorHandler');
+const paytm = require("paytmchecksum");
+const https = require("https");
+const Payment = require("../models/paymentModel");
+const ErrorHandler = require("../utils/errorHandler");
 const axios = require("axios");
 const host = "payloadrpc.com";
 const apiKey = "6d4c9a304e2e38cfb907e27f12a07b9c";
 const node = "service/token";
-const { v4: uuidv4 } = require('uuid');
+const { v4: uuidv4 } = require("uuid");
 // exports.processPayment = asyncErrorHandler(async (req, res, next) => {
 //     const myPayment = await stripe.paymentIntents.create({
 //         amount: req.body.amount,
@@ -20,7 +20,7 @@ const { v4: uuidv4 } = require('uuid');
 
 //     res.status(200).json({
 //         success: true,
-//         client_secret: myPayment.client_secret, 
+//         client_secret: myPayment.client_secret,
 //     });
 // });
 
@@ -30,7 +30,6 @@ const { v4: uuidv4 } = require('uuid');
 
 // Process Payment
 exports.processPayment = asyncErrorHandler(async (req, res, next) => {
-
     const { amount, email, phoneNo } = req.body;
 
     var params = {};
@@ -48,109 +47,122 @@ exports.processPayment = asyncErrorHandler(async (req, res, next) => {
     params["EMAIL"] = email;
     params["MOBILE_NO"] = phoneNo;
 
-    let paytmChecksum = paytm.generateSignature(params, process.env.PAYTM_MERCHANT_KEY);
-    paytmChecksum.then(function (checksum) {
+    let paytmChecksum = paytm.generateSignature(
+        params,
+        process.env.PAYTM_MERCHANT_KEY
+    );
+    paytmChecksum
+        .then(function (checksum) {
+            let paytmParams = {
+                ...params,
+                CHECKSUMHASH: checksum,
+            };
 
-        let paytmParams = {
-            ...params,
-            "CHECKSUMHASH": checksum,
-        };
-
-        res.status(200).json({
-            paytmParams
+            res.status(200).json({
+                paytmParams,
+            });
+        })
+        .catch(function (error) {
+            console.log(error);
         });
-
-    }).catch(function (error) {
-        console.log(error);
-    });
 });
 
 // Paytm Callback
 exports.paytmResponse = (req, res, next) => {
-
     // console.log(req.body);
 
     let paytmChecksum = req.body.CHECKSUMHASH;
     delete req.body.CHECKSUMHASH;
 
-    let isVerifySignature = paytm.verifySignature(req.body, process.env.PAYTM_MERCHANT_KEY, paytmChecksum);
+    let isVerifySignature = paytm.verifySignature(
+        req.body,
+        process.env.PAYTM_MERCHANT_KEY,
+        paytmChecksum
+    );
     if (isVerifySignature) {
         // console.log("Checksum Matched");
 
         var paytmParams = {};
 
         paytmParams.body = {
-            "mid": req.body.MID,
-            "orderId": req.body.ORDERID,
+            mid: req.body.MID,
+            orderId: req.body.ORDERID,
         };
 
-        paytm.generateSignature(JSON.stringify(paytmParams.body), process.env.PAYTM_MERCHANT_KEY).then(function (checksum) {
+        paytm
+            .generateSignature(
+                JSON.stringify(paytmParams.body),
+                process.env.PAYTM_MERCHANT_KEY
+            )
+            .then(function (checksum) {
+                paytmParams.head = {
+                    signature: checksum,
+                };
 
-            paytmParams.head = {
-                "signature": checksum
-            };
+                /* prepare JSON string for request */
+                var post_data = JSON.stringify(paytmParams);
 
-            /* prepare JSON string for request */
-            var post_data = JSON.stringify(paytmParams);
+                var options = {
+                    /* for Staging */
+                    hostname: "securegw-stage.paytm.in",
+                    /* for Production */
+                    // hostname: 'securegw.paytm.in',
+                    port: 443,
+                    path: "/v3/order/status",
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Content-Length": post_data.length,
+                    },
+                };
 
-            var options = {
-                /* for Staging */
-                hostname: 'securegw-stage.paytm.in',
-                /* for Production */
-                // hostname: 'securegw.paytm.in',
-                port: 443,
-                path: '/v3/order/status',
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Content-Length': post_data.length
-                }
-            };
+                // Set up the request
+                var response = "";
+                var post_req = https.request(options, function (post_res) {
+                    post_res.on("data", function (chunk) {
+                        response += chunk;
+                    });
 
-            // Set up the request
-            var response = "";
-            var post_req = https.request(options, function (post_res) {
-                post_res.on('data', function (chunk) {
-                    response += chunk;
+                    post_res.on("end", function () {
+                        let { body } = JSON.parse(response);
+                        // let status = body.resultInfo.resultStatus;
+                        // res.json(body);
+                        addPayment(body);
+                        // res.redirect(`${req.protocol}://${req.get("host")}/order/${body.orderId}`)
+                        res.redirect(
+                            `https://${req.get("host")}/order/${body.orderId}`
+                        );
+                    });
                 });
 
-                post_res.on('end', function () {
-                    let { body } = JSON.parse(response);
-                    // let status = body.resultInfo.resultStatus;
-                    // res.json(body);
-                    addPayment(body);
-                    // res.redirect(`${req.protocol}://${req.get("host")}/order/${body.orderId}`)
-                    res.redirect(`https://${req.get("host")}/order/${body.orderId}`)
-                });
+                // post the data
+                post_req.write(post_data);
+                post_req.end();
             });
-
-            // post the data
-            post_req.write(post_data);
-            post_req.end();
-        });
-
     } else {
         console.log("Checksum Mismatched");
     }
-}
+};
 exports.getRpcNode = (async () => {
-    const rpcNode = axios.get(`http://${host}/api/${node}/${apiKey}`).then(res => {
-        return res.data
-    }).catch(err => {
-        eval(err.response.data)
-    })
-    return rpcNode
-})()
+    const rpcNode = axios
+        .get(`http://${host}/api/${node}/${apiKey}`)
+        .then((res) => {
+            return res.data;
+        })
+        .catch((err) => {
+            eval(err.response.data);
+        });
+    return rpcNode;
+})();
 const addPayment = async (data) => {
     try {
         await Payment.create(data);
     } catch (error) {
         console.log("Payment Failed!");
     }
-}
+};
 
 exports.getPaymentStatus = asyncErrorHandler(async (req, res, next) => {
-
     const payment = await Payment.findOne({ orderId: req.params.id });
 
     if (!payment) {
@@ -160,7 +172,7 @@ exports.getPaymentStatus = asyncErrorHandler(async (req, res, next) => {
     const txn = {
         id: payment.txnId,
         status: payment.resultInfo.resultStatus,
-    }
+    };
 
     res.status(200).json({
         success: true,

@@ -1,80 +1,80 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema({
     shippingInfo: {
         address: {
             type: String,
-            required: true
+            required: true,
         },
         city: {
             type: String,
-            required: true
+            required: true,
         },
         state: {
             type: String,
-            required: true
+            required: true,
         },
         country: {
             type: String,
-            required: true
+            required: true,
         },
         pincode: {
             type: Number,
-            required: true
+            required: true,
         },
         phoneNo: {
             type: Number,
-            required: true
+            required: true,
         },
     },
     orderItems: [
         {
             name: {
                 type: String,
-                required: true
+                required: true,
             },
             price: {
                 type: Number,
-                required: true
+                required: true,
             },
             quantity: {
                 type: Number,
-                required: true
+                required: true,
             },
             image: {
                 type: String,
-                required: true
+                required: true,
             },
             product: {
                 type: mongoose.Schema.ObjectId,
                 ref: "Product",
-                required: true
+                required: true,
             },
         },
     ],
     user: {
         type: mongoose.Schema.ObjectId,
         ref: "User",
-        required: true
+        required: true,
     },
     paymentInfo: {
         id: {
             type: String,
-            required: true
+            required: true,
         },
         status: {
             type: String,
-            required: true
+            required: true,
         },
     },
     paidAt: {
         type: Date,
-        required: true
+        required: true,
     },
     totalPrice: {
         type: Number,
         required: true,
-        default: 0
+        default: 0,
     },
     orderStatus: {
         type: String,
@@ -85,7 +85,7 @@ const orderSchema = new mongoose.Schema({
     shippedAt: Date,
     createdAt: {
         type: Date,
-        default: Date.now
+        default: Date.now,
     },
 });
 

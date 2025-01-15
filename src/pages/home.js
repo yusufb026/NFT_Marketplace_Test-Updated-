@@ -116,7 +116,7 @@ export default function () {
         // console.log(Date.parse(curtime));
         return Date.parse(curtime);
         // new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toISOString().slice(0, 16)
-    }
+    };
 
     let pinataApiKey = "7c29e9aba6e0e32a199c";
     let pinataSecretApiKey =
@@ -224,9 +224,12 @@ export default function () {
         );
 
         if (parseFloat(characterMinted) >= parseFloat(characterSupply)) {
-            toast.error("Maximum Supply of selected Archetype Reached, can not be minted more", {
-                style: { background: "black" },
-            });
+            toast.error(
+                "Maximum Supply of selected Archetype Reached, can not be minted more",
+                {
+                    style: { background: "black" },
+                }
+            );
             setLoading(false);
             return false;
         }
@@ -375,17 +378,21 @@ export default function () {
                                 image:
                                     "https://gateway.pinata.cloud/ipfs/" +
                                     IpfsHash,
-                                "date": getCurrentTime(),
+                                date: getCurrentTime(),
                                 attributes: [
                                     {
-                                        "trait_type": "Archetype",
-                                        "value": getCharacterProperties(characterId).Archetype
+                                        trait_type: "Archetype",
+                                        value: getCharacterProperties(
+                                            characterId
+                                        ).Archetype,
                                     },
                                     {
-                                        "trait_type": "Rarity",
-                                        "value": getCharacterProperties(characterId).Rarity
-                                    }
-                                ]
+                                        trait_type: "Rarity",
+                                        value: getCharacterProperties(
+                                            characterId
+                                        ).Rarity,
+                                    },
+                                ],
                             },
                         };
                         // buffer_json = JSON.stringify(buffer_json);

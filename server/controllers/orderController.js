@@ -1,18 +1,12 @@
-const asyncErrorHandler = require('../middlewares/helpers/asyncErrorHandler');
-const Order = require('../models/orderModel');
-const Product = require('../models/productModel');
-const ErrorHandler = require('../utils/errorHandler');
-const sendEmail = require('../utils/sendEmail');
+const asyncErrorHandler = require("../middlewares/helpers/asyncErrorHandler");
+const Order = require("../models/orderModel");
+const Product = require("../models/productModel");
+const ErrorHandler = require("../utils/errorHandler");
+const sendEmail = require("../utils/sendEmail");
 
 // Create New Order
 exports.newOrder = asyncErrorHandler(async (req, res, next) => {
-
-    const {
-        shippingInfo,
-        orderItems,
-        paymentInfo,
-        totalPrice,
-    } = req.body;
+    const { shippingInfo, orderItems, paymentInfo, totalPrice } = req.body;
 
     const orderExist = await Order.findOne({ paymentInfo });
 
@@ -38,7 +32,7 @@ exports.newOrder = asyncErrorHandler(async (req, res, next) => {
             orderItems,
             totalPrice,
             oid: order._id,
-        }
+        },
     });
 
     res.status(201).json({
@@ -49,8 +43,10 @@ exports.newOrder = asyncErrorHandler(async (req, res, next) => {
 
 // Get Single Order Details
 exports.getSingleOrderDetails = asyncErrorHandler(async (req, res, next) => {
-
-    const order = await Order.findById(req.params.id).populate("user", "name email");
+    const order = await Order.findById(req.params.id).populate(
+        "user",
+        "name email"
+    );
 
     if (!order) {
         return next(new ErrorHandler("Order Not Found", 404));
@@ -62,10 +58,8 @@ exports.getSingleOrderDetails = asyncErrorHandler(async (req, res, next) => {
     });
 });
 
-
 // Get Logged In User Orders
 exports.myOrders = asyncErrorHandler(async (req, res, next) => {
-
     const orders = await Order.find({ user: req.user._id });
 
     if (!orders) {
@@ -78,10 +72,8 @@ exports.myOrders = asyncErrorHandler(async (req, res, next) => {
     });
 });
 
-
 // Get All Orders ---ADMIN
 exports.getAllOrders = asyncErrorHandler(async (req, res, next) => {
-
     const orders = await Order.find();
 
     if (!orders) {
@@ -102,7 +94,6 @@ exports.getAllOrders = asyncErrorHandler(async (req, res, next) => {
 
 // Update Order Status ---ADMIN
 exports.updateOrder = asyncErrorHandler(async (req, res, next) => {
-
     const order = await Order.findById(req.params.id);
 
     if (!order) {
@@ -116,7 +107,7 @@ exports.updateOrder = asyncErrorHandler(async (req, res, next) => {
     if (req.body.status === "Shipped") {
         order.shippedAt = Date.now();
         order.orderItems.forEach(async (i) => {
-            await updateStock(i.product, i.quantity)
+            await updateStock(i.product, i.quantity);
         });
     }
 
@@ -128,7 +119,7 @@ exports.updateOrder = asyncErrorHandler(async (req, res, next) => {
     await order.save({ validateBeforeSave: false });
 
     res.status(200).json({
-        success: true
+        success: true,
     });
 });
 
@@ -140,7 +131,6 @@ async function updateStock(id, quantity) {
 
 // Delete Order ---ADMIN
 exports.deleteOrder = asyncErrorHandler(async (req, res, next) => {
-
     const order = await Order.findById(req.params.id);
 
     if (!order) {

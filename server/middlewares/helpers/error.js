@@ -15,17 +15,17 @@
 const errorMiddleware = (err, req, res, next) => {
     // Log the error (optional)
     logger.error(err);
-  
+
     // Handle specific error types if needed
     // if (err instanceof ValidationError) {
     //   return res.status(err.statusCode).json(err);
     // }
-  
+
     // Default error response
     res.status(err.status || 500).json({
-      message: err.message || 'Internal Server Error',
-      error: process.env.NODE_ENV === 'development' ? err : {}
+        message: err.message || "Internal Server Error",
+        error: process.env.NODE_ENV === "development" ? err : {},
     });
-  };
-  
-  module.exports = errorMiddleware;
+};
+
+module.exports = errorMiddleware;
