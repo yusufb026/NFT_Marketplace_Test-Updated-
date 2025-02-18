@@ -1,18 +1,18 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 const Loading = ({ ...restProps }) => {
-    const [active, setActive] = useState("");
+  const [active, setActive] = useState('');
 
-    useEffect(() => {});
+  useEffect(() => {});
 
-    const tempfunction = (id) => {
-        setActive(id);
-    };
+  const tempfunction = (id) => {
+    setActive(id);
+  };
 
-    return (
-        <div id="load_div" {...restProps}>
-            <img src="img/loading.gif" className="loading" />
-        </div>
-    );
+  return (
+    <div id="load_div" {...restProps}>
+      <img src="img/loading.gif" className="loading" />
+    </div>
+  );
 };
 
 export default Loading;
