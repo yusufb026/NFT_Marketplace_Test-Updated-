@@ -1,10 +1,10 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const warehouseSchema = new mongoose.Schema(
    {
       admin: {
          type: Schema.Types.ObjectId,
-         ref: "admin",
+         ref: 'admin',
          required: true,
       },
       name: {
@@ -39,4 +39,4 @@ const warehouseSchema = new mongoose.Schema(
    { timestamps: true }
 );
 
-module.exports = mongoose.model("adminwarehouse", warehouseSchema);
+module.exports = mongoose.model('adminwarehouse', warehouseSchema);

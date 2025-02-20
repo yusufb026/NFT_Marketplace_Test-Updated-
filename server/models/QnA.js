@@ -1,9 +1,9 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const qnaSchema = new mongoose.Schema({
    product: {
       type: Schema.Types.ObjectId,
-      ref: "product",
+      ref: 'product',
       required: true,
    },
    qna: [
@@ -13,7 +13,7 @@ const qnaSchema = new mongoose.Schema({
          },
          questionby: {
             type: Schema.Types.ObjectId,
-            ref: "user",
+            ref: 'user',
          },
          questionedDate: {
             type: Date,
@@ -23,7 +23,7 @@ const qnaSchema = new mongoose.Schema({
          },
          answerby: {
             type: Schema.Types.ObjectId,
-            ref: "admin",
+            ref: 'admin',
          },
          answeredDate: {
             type: Date,
@@ -36,4 +36,4 @@ const qnaSchema = new mongoose.Schema({
    ],
 });
 
-module.exports = mongoose.model("qna", qnaSchema);
+module.exports = mongoose.model('qna', qnaSchema);

@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
-const URLSlugs = require("mongoose-url-slugs");
-const { districts } = require("../middleware/common");
+const mongoose = require('mongoose');
+const URLSlugs = require('mongoose-url-slugs');
+const { districts } = require('../middleware/common');
 const Schema = mongoose.Schema;
 const productSchema = mongoose.Schema(
    {
@@ -12,7 +12,7 @@ const productSchema = mongoose.Schema(
       },
       brand: {
          type: Schema.Types.ObjectId,
-         ref: "productbrand",
+         ref: 'productbrand',
       },
       quantity: {
          type: Number,
@@ -23,7 +23,7 @@ const productSchema = mongoose.Schema(
       category: [
          {
             type: Schema.Types.ObjectId,
-            ref: "category",
+            ref: 'category',
          },
       ],
       averageRating: {
@@ -34,12 +34,12 @@ const productSchema = mongoose.Schema(
       },
       soldBy: {
          type: Schema.Types.ObjectId,
-         ref: "admin",
+         ref: 'admin',
       },
       images: [
          {
             type: Schema.Types.ObjectId,
-            ref: "productimages",
+            ref: 'productimages',
          },
       ],
       warranty: {
@@ -152,11 +152,13 @@ const productSchema = mongoose.Schema(
       remark: [
          {
             type: Schema.Types.ObjectId,
-            ref: "remark",
+            ref: 'remark',
          },
       ],
    },
    { timestamps: true }
 );
-productSchema.plugin(URLSlugs("name", { field: "slug", update: true }));
-module.exports = mongoose.model("product", productSchema);
+productSchema.plugin(
+   URLSlugs('name', { field: 'slug', update: true })
+);
+module.exports = mongoose.model('product', productSchema);

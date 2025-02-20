@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const remarkSchema = mongoose.Schema(
    {
@@ -27,4 +27,4 @@ const remarkSchema = mongoose.Schema(
    },
    { timestamps: true }
 );
-module.exports = mongoose.model("remark", remarkSchema);
+module.exports = mongoose.model('remark', remarkSchema);

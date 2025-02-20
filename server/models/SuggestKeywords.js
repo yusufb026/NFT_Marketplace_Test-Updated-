@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const suggestKeywordSchema = mongoose.Schema(
    {
       keyword: {
@@ -12,4 +12,7 @@ const suggestKeywordSchema = mongoose.Schema(
    },
    { timestamps: true }
 );
-module.exports = mongoose.model("suggestkeyword", suggestKeywordSchema);
+module.exports = mongoose.model(
+   'suggestkeyword',
+   suggestKeywordSchema
+);

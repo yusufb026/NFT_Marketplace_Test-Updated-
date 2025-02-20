@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const leadSchema = mongoose.Schema(
    {
       email: {
@@ -12,4 +12,4 @@ const leadSchema = mongoose.Schema(
    },
    { timestamps: true }
 );
-module.exports = mongoose.model("lead", leadSchema);
+module.exports = mongoose.model('lead', leadSchema);

@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const crypto = require("crypto");
+const mongoose = require('mongoose');
+const crypto = require('crypto');
 const Schema = mongoose.Schema;
 const userSchema = new mongoose.Schema(
    {
@@ -21,8 +21,8 @@ const userSchema = new mongoose.Schema(
       },
       loginDomain: {
          type: String,
-         default: "system", //can be facebook, google as well
-         enum: ["system", "facebook", "google"],
+         default: 'system', //can be facebook, google as well
+         enum: ['system', 'facebook', 'google'],
       },
       password: {
          type: String,
@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema(
       location: [
          {
             type: Schema.Types.ObjectId,
-            ref: "address",
+            ref: 'address',
          },
       ],
       photo: {
@@ -45,15 +45,15 @@ const userSchema = new mongoose.Schema(
       },
       gender: {
          type: String,
-         enum: ["male", "female", "other"],
+         enum: ['male', 'female', 'other'],
       },
       resetPasswordLink: {
          type: String,
-         default: "",
+         default: '',
       },
       emailVerifyLink: {
          type: String,
-         default: "",
+         default: '',
       },
       salt: String,
       isBlocked: {
@@ -63,22 +63,25 @@ const userSchema = new mongoose.Schema(
    },
    { timestamps: true }
 );
-userSchema.index({ geolocation: "2dsphere" });
+userSchema.index({ geolocation: '2dsphere' });
 
 const sha512 = function (password, salt) {
-   let hash = crypto.createHmac("sha512", salt);
+   let hash = crypto.createHmac('sha512', salt);
    hash.update(password);
-   let value = hash.digest("hex");
+   let value = hash.digest('hex');
    return {
       passwordHash: value,
    };
 };
-userSchema.pre("save", function (next) {
+userSchema.pre('save', function (next) {
    let user = this;
-   if (user.isModified("password")) {
+   if (user.isModified('password')) {
       // salt
       const ranStr = function (n) {
-         return crypto.randomBytes(Math.ceil(8)).toString("hex").slice(0, n);
+         return crypto
+            .randomBytes(Math.ceil(8))
+            .toString('hex')
+            .slice(0, n);
       };
       // applying sha512 alogrithm
       let salt = ranStr(16);
@@ -90,14 +93,20 @@ userSchema.pre("save", function (next) {
       next();
    }
 });
-userSchema.statics.findByCredentials = async function (email, password) {
+userSchema.statics.findByCredentials = async function (
+   email,
+   password
+) {
    let User = this;
-   const user = await User.findOne({ email, loginDomain: "system" });
-   if (!user) return "";
+   const user = await User.findOne({
+      email,
+      loginDomain: 'system',
+   });
+   if (!user) return '';
    let passwordData = sha512(password, user.salt);
    if (passwordData.passwordHash == user.password) {
       return user;
    }
 };
 
-module.exports = mongoose.model("user", userSchema);
+module.exports = mongoose.model('user', userSchema);

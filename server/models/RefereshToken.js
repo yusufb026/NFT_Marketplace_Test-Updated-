@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const tokenSchema = mongoose.Schema({
    //we need user ref in order to create accessToken of that user only
@@ -8,7 +8,7 @@ const tokenSchema = mongoose.Schema({
    // },
    refreshToken: {
       type: String,
-      default: "",
+      default: '',
    },
    userIP: {
       type: String,
@@ -21,4 +21,4 @@ const tokenSchema = mongoose.Schema({
    //     enum: ['user', 'admin','dispatcher']
    // },
 });
-module.exports = mongoose.model("refreshtoken", tokenSchema);
+module.exports = mongoose.model('refreshtoken', tokenSchema);

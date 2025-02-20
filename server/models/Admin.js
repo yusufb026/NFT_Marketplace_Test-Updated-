@@ -1,10 +1,10 @@
-const mongoose = require("mongoose");
-const crypto = require("crypto");
+const mongoose = require('mongoose');
+const crypto = require('crypto');
 const Schema = mongoose.Schema;
 const pointSchema = new mongoose.Schema({
    type: {
       type: String,
-      enum: ["Point"],
+      enum: ['Point'],
    },
    coordinates: {
       type: [Number],
@@ -52,15 +52,15 @@ const adminSchema = new mongoose.Schema(
       },
       businessInfo: {
          type: Schema.Types.ObjectId,
-         ref: "businessinfo",
+         ref: 'businessinfo',
       },
       adminBank: {
          type: Schema.Types.ObjectId,
-         ref: "adminbank",
+         ref: 'adminbank',
       },
       adminWareHouse: {
          type: Schema.Types.ObjectId,
-         ref: "adminwarehouse",
+         ref: 'adminwarehouse',
       },
       phone: {
          type: Number,
@@ -89,16 +89,16 @@ const adminSchema = new mongoose.Schema(
       salt: String,
       role: {
          type: String,
-         enum: ["admin", "superadmin"],
-         default: "admin",
+         enum: ['admin', 'superadmin'],
+         default: 'admin',
       },
       resetPasswordLink: {
          type: String,
-         default: "",
+         default: '',
       },
       emailVerifyLink: {
          type: String,
-         default: "",
+         default: '',
       },
       isVerified: {
          type: Date,
@@ -111,22 +111,25 @@ const adminSchema = new mongoose.Schema(
    },
    { timestamps: true }
 );
-adminSchema.index({ geolocation: "2dsphere" });
+adminSchema.index({ geolocation: '2dsphere' });
 
 const sha512 = function (password, salt) {
-   let hash = crypto.createHmac("sha512", salt);
+   let hash = crypto.createHmac('sha512', salt);
    hash.update(password);
-   let value = hash.digest("hex");
+   let value = hash.digest('hex');
    return {
       passwordHash: value,
    };
 };
-adminSchema.pre("save", function (next) {
+adminSchema.pre('save', function (next) {
    let admin = this;
-   if (admin.isModified("password")) {
+   if (admin.isModified('password')) {
       // salt
       const ranStr = function (n) {
-         return crypto.randomBytes(Math.ceil(8)).toString("hex").slice(0, n);
+         return crypto
+            .randomBytes(Math.ceil(8))
+            .toString('hex')
+            .slice(0, n);
       };
       // applying sha512 alogrithm
       let salt = ranStr(16);
@@ -138,13 +141,16 @@ adminSchema.pre("save", function (next) {
       next();
    }
 });
-adminSchema.statics.findByCredentials = async function (email, password) {
+adminSchema.statics.findByCredentials = async function (
+   email,
+   password
+) {
    let Admin = this;
    const admin = await Admin.findOne({ email });
-   if (!admin) return "";
+   if (!admin) return '';
    let passwordData = sha512(password, admin.salt);
    if (passwordData.passwordHash == admin.password) {
       return admin;
    }
 };
-module.exports = mongoose.model("admin", adminSchema);
+module.exports = mongoose.model('admin', adminSchema);

@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const productImageSchema = mongoose.Schema(
    {
@@ -13,10 +13,13 @@ const productImageSchema = mongoose.Schema(
       },
       productLink: {
          type: Schema.Types.ObjectId,
-         ref: "product",
+         ref: 'product',
          default: null,
       },
    },
    { timestamps: true }
 );
-module.exports = mongoose.model("productimages", productImageSchema);
+module.exports = mongoose.model(
+   'productimages',
+   productImageSchema
+);

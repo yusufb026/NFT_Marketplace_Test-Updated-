@@ -1,20 +1,20 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const paymentSchema = new mongoose.Schema(
    {
       user: {
          type: Schema.Types.ObjectId,
-         ref: "user",
+         ref: 'user',
          required: true,
       },
       order: {
          type: Schema.Types.ObjectId,
-         ref: "order",
+         ref: 'order',
          required: true,
       },
       method: {
          type: String,
-         enum: ["Cash on Delivery", "manual"], //manual ==> bank or manual esewa..
+         enum: ['Cash on Delivery', 'manual'], //manual ==> bank or manual esewa..
       },
       shippingCharge: {
          type: Number,
@@ -42,4 +42,4 @@ const paymentSchema = new mongoose.Schema(
    { timestamps: true }
 );
 
-module.exports = mongoose.model("payment", paymentSchema);
+module.exports = mongoose.model('payment', paymentSchema);

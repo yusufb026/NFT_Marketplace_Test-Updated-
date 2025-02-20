@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const manualOrderSchema = mongoose.Schema(
    {
@@ -18,4 +18,4 @@ const manualOrderSchema = mongoose.Schema(
    },
    { timestamps: true }
 );
-module.exports = mongoose.model("manualorder", manualOrderSchema);
+module.exports = mongoose.model('manualorder', manualOrderSchema);

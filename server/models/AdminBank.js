@@ -1,10 +1,10 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const bankSchema = new mongoose.Schema(
    {
       admin: {
          type: Schema.Types.ObjectId,
-         ref: "admin",
+         ref: 'admin',
          required: true,
       },
       accountHolder: {
@@ -39,7 +39,7 @@ const bankSchema = new mongoose.Schema(
       },
       chequeCopy: {
          type: Schema.Types.ObjectId,
-         ref: "adminfile",
+         ref: 'adminfile',
       },
       isVerified: {
          type: Date, //as we may need verified date
@@ -49,4 +49,4 @@ const bankSchema = new mongoose.Schema(
    { timestamps: true }
 );
 
-module.exports = mongoose.model("adminbank", bankSchema);
+module.exports = mongoose.model('adminbank', bankSchema);

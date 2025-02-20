@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const orderSchema = new mongoose.Schema({
    shippingInfo: {
@@ -47,14 +47,14 @@ const orderSchema = new mongoose.Schema({
          },
          product: {
             type: mongoose.Schema.ObjectId,
-            ref: "Product",
+            ref: 'Product',
             required: true,
          },
       },
    ],
    user: {
       type: mongoose.Schema.ObjectId,
-      ref: "User",
+      ref: 'User',
       required: true,
    },
    paymentInfo: {
@@ -79,7 +79,7 @@ const orderSchema = new mongoose.Schema({
    orderStatus: {
       type: String,
       required: true,
-      default: "Processing",
+      default: 'Processing',
    },
    deliveredAt: Date,
    shippedAt: Date,
@@ -89,4 +89,4 @@ const orderSchema = new mongoose.Schema({
    },
 });
 
-module.exports = mongoose.model("Order", orderSchema);
+module.exports = mongoose.model('Order', orderSchema);

@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const URLSlugs = require("mongoose-url-slugs");
+const mongoose = require('mongoose');
+const URLSlugs = require('mongoose-url-slugs');
 const Schema = mongoose.Schema;
 const categorySchema = new mongoose.Schema({
    systemName: {
@@ -16,12 +16,12 @@ const categorySchema = new mongoose.Schema({
    },
    parent: {
       type: Schema.Types.ObjectId,
-      ref: "productbrand",
+      ref: 'productbrand',
    },
    brands: [
       {
          type: Schema.Types.ObjectId,
-         ref: "category",
+         ref: 'category',
       },
    ],
    slug: {
@@ -32,5 +32,7 @@ const categorySchema = new mongoose.Schema({
       default: null,
    },
 });
-categorySchema.plugin(URLSlugs("displayName", { field: "slug", update: true }));
-module.exports = mongoose.model("category", categorySchema);
+categorySchema.plugin(
+   URLSlugs('displayName', { field: 'slug', update: true })
+);
+module.exports = mongoose.model('category', categorySchema);

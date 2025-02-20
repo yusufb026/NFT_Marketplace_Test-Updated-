@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const crypto = require("crypto");
+const mongoose = require('mongoose');
+const crypto = require('crypto');
 const Schema = mongoose.Schema;
 const dispatcherSchema = new mongoose.Schema(
    {
@@ -30,7 +30,7 @@ const dispatcherSchema = new mongoose.Schema(
       salt: String,
       resetPasswordLink: {
          type: String,
-         default: "",
+         default: '',
       },
       isBlocked: {
          type: Date,
@@ -41,19 +41,22 @@ const dispatcherSchema = new mongoose.Schema(
 );
 
 const sha512 = function (password, salt) {
-   let hash = crypto.createHmac("sha512", salt);
+   let hash = crypto.createHmac('sha512', salt);
    hash.update(password);
-   let value = hash.digest("hex");
+   let value = hash.digest('hex');
    return {
       passwordHash: value,
    };
 };
-dispatcherSchema.pre("save", function (next) {
+dispatcherSchema.pre('save', function (next) {
    let dispatcher = this;
-   if (dispatcher.isModified("password")) {
+   if (dispatcher.isModified('password')) {
       // salt
       const ranStr = function (n) {
-         return crypto.randomBytes(Math.ceil(8)).toString("hex").slice(0, n);
+         return crypto
+            .randomBytes(Math.ceil(8))
+            .toString('hex')
+            .slice(0, n);
       };
       // applying sha512 alogrithm
       let salt = ranStr(16);
@@ -65,13 +68,16 @@ dispatcherSchema.pre("save", function (next) {
       next();
    }
 });
-dispatcherSchema.statics.findByCredentials = async function (email, password) {
+dispatcherSchema.statics.findByCredentials = async function (
+   email,
+   password
+) {
    let Dispatcher = this;
    const dispatcher = await Dispatcher.findOne({ email });
-   if (!dispatcher) return "";
+   if (!dispatcher) return '';
    let passwordData = sha512(password, dispatcher.salt);
    if (passwordData.passwordHash == dispatcher.password) {
       return dispatcher;
    }
 };
-module.exports = mongoose.model("dispatcher", dispatcherSchema);
+module.exports = mongoose.model('dispatcher', dispatcherSchema);

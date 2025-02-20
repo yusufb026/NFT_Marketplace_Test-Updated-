@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const { districts } = require("../middleware/common");
+const mongoose = require('mongoose');
+const { districts } = require('../middleware/common');
 const districtSchema = mongoose.Schema(
    {
       name: {
@@ -10,4 +10,4 @@ const districtSchema = mongoose.Schema(
    },
    { timestamps: true }
 );
-module.exports = mongoose.model("district", districtSchema);
+module.exports = mongoose.model('district', districtSchema);

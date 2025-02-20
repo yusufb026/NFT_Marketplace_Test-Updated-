@@ -1,11 +1,11 @@
-const mongoose = require("mongoose");
-const { allOrderStatus } = require("../middleware/common");
+const mongoose = require('mongoose');
+const { allOrderStatus } = require('../middleware/common');
 
 const Schema = mongoose.Schema;
 const pointSchema = new mongoose.Schema({
    type: {
       type: String,
-      enum: ["Point"],
+      enum: ['Point'],
    },
    coordinates: {
       type: [Number],
@@ -15,7 +15,7 @@ const orderSchema = new mongoose.Schema(
    {
       user: {
          type: Schema.Types.ObjectId,
-         ref: "user",
+         ref: 'user',
          required: true,
       },
       orderID: {
@@ -24,19 +24,19 @@ const orderSchema = new mongoose.Schema(
       },
       product: {
          type: Schema.Types.ObjectId,
-         ref: "product",
+         ref: 'product',
          required: true,
       },
       payment: {
          type: Schema.Types.ObjectId,
-         ref: "payment",
+         ref: 'payment',
       },
       quantity: {
          type: Number,
       },
       soldBy: {
          type: Schema.Types.ObjectId,
-         ref: "admin",
+         ref: 'admin',
       },
       status: {
          currentStatus: {
@@ -58,7 +58,7 @@ const orderSchema = new mongoose.Schema(
             },
             dispatchedBy: {
                type: Schema.Types.ObjectId,
-               ref: "dispatcher",
+               ref: 'dispatcher',
             },
          },
          cancelledDetail: {
@@ -68,11 +68,11 @@ const orderSchema = new mongoose.Schema(
             },
             cancelledBy: {
                type: Schema.Types.ObjectId,
-               refPath: "cancelledByModel",
+               refPath: 'cancelledByModel',
             },
             remark: {
                type: Schema.Types.ObjectId,
-               ref: "remark",
+               ref: 'remark',
             },
          },
          completedDate: {
@@ -99,12 +99,12 @@ const orderSchema = new mongoose.Schema(
             },
             returneddBy: {
                type: Schema.Types.ObjectId,
-               ref: "dispatcher",
+               ref: 'dispatcher',
             },
             remark: [
                {
                   type: Schema.Types.ObjectId,
-                  ref: "remark",
+                  ref: 'remark',
                },
             ],
          },
@@ -144,7 +144,7 @@ const orderSchema = new mongoose.Schema(
       },
       cancelledByModel: {
          type: String,
-         enum: ["user", "admin"],
+         enum: ['user', 'admin'],
       },
       productAttributes: {
          type: String,
@@ -152,6 +152,6 @@ const orderSchema = new mongoose.Schema(
    },
    { timestamps: true }
 );
-orderSchema.index({ geolocation: "2dsphere" });
+orderSchema.index({ geolocation: '2dsphere' });
 
-module.exports = mongoose.model("order", orderSchema);
+module.exports = mongoose.model('order', orderSchema);

@@ -1,9 +1,9 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const pointSchema = new mongoose.Schema({
    type: {
       type: String,
-      enum: ["Point"],
+      enum: ['Point'],
    },
    coordinates: {
       type: [Number],
@@ -14,13 +14,13 @@ const addressSchema = new mongoose.Schema(
    {
       user: {
          type: Schema.Types.ObjectId,
-         ref: "user",
+         ref: 'user',
          required: true,
       },
       label: {
          type: String,
          trim: true,
-         enum: ["home", "office", "other"],
+         enum: ['home', 'office', 'other'],
       },
       region: {
          //pradesh
@@ -56,6 +56,6 @@ const addressSchema = new mongoose.Schema(
    },
    { timestamps: true }
 );
-addressSchema.index({ geolocation: "2dsphere" });
+addressSchema.index({ geolocation: '2dsphere' });
 
-module.exports = mongoose.model("address", addressSchema);
+module.exports = mongoose.model('address', addressSchema);

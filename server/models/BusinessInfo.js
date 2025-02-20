@@ -1,10 +1,10 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const businessSchema = new mongoose.Schema(
    {
       admin: {
          type: Schema.Types.ObjectId,
-         ref: "admin",
+         ref: 'admin',
          required: true,
       },
       ownerName: {
@@ -39,15 +39,15 @@ const businessSchema = new mongoose.Schema(
       },
       citizenshipFront: {
          type: Schema.Types.ObjectId,
-         ref: "adminfile",
+         ref: 'adminfile',
       },
       citizenshipBack: {
          type: Schema.Types.ObjectId,
-         ref: "adminfile",
+         ref: 'adminfile',
       },
       businessLicence: {
          type: Schema.Types.ObjectId,
-         ref: "adminfile",
+         ref: 'adminfile',
       },
       isVerified: {
          type: Date, //as we may need verified date
@@ -57,4 +57,4 @@ const businessSchema = new mongoose.Schema(
    { timestamps: true }
 );
 
-module.exports = mongoose.model("businessinfo", businessSchema);
+module.exports = mongoose.model('businessinfo', businessSchema);
